@@ -1,0 +1,4 @@
+# ipynb checkpoints not needed because git already provides the functionality
+# to go back to an older version
+.ipynb_checkpoints/
+
