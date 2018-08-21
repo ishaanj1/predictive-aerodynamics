@@ -18,14 +18,21 @@ def load_data():
         data_runs.append(data_run)
     return data_runs
 
-def merge_rows(X_initial, y_initial, num_rows_merge):
-    X = pd.DataFrame()
-    y = pd.DataFrame()
+def merge_rows(X, y, num_rows_merge):
+    X_new = pd.DataFrame()
+    y_new = pd.DataFrame()
 
-    for i in range(0, X_initial.shape[0], num_rows_merge):
-        X_row = pd.Series(X_initial.iloc[i:i+num_rows_merge, :].values.flatten())
-        X = X.append(X_row, ignore_index=True)
-        y_row = pd.Series(y_initial.iloc[i+num_rows_merge-1])
-        y = y.append(y_row, ignore_index=True)
+    for i in range(0, X.shape[0], num_rows_merge):
+        X_row = pd.Series(X.iloc[i:i+num_rows_merge, :].values.flatten())
+        X_new = X_new.append(X_row, ignore_index=True)
+        y_row = pd.Series(y.iloc[i+num_rows_merge-1])
+        y_new = y_new.append(y_row, ignore_index=True)
     
+    return X_new, y_new
+
+def shuffle_rows(X, y):
+    X_y = pd.concat([X, y], axis='columns', ignore_index=True)
+    X_y = X_y.sample(frac=1).reset_index(drop=True)
+    X = X_y.iloc[:, 0:-1]
+    y = X_y.iloc[:, -1:]
     return X, y
